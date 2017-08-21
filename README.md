@@ -1,2 +1,2 @@
 # Xamarin-GoogleAuth
-Code sample of implementing Google authentication in a Xamarin app
+Code sample letting the users connect with their Google accounts, using Xamarin.Auth and the IsNativeUI flag (now required by Google)
