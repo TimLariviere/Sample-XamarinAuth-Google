@@ -10,11 +10,11 @@ namespace Xamarin_GoogleAuth.Authentication
         private const bool IsUsingNativeUI = true;
 
         private OAuth2Authenticator _auth;
-        private IGoogleAuthenticationDelegate _authenticatorDelegate;
+        private IGoogleAuthenticationDelegate _authenticatonDelegate;
 
-        public GoogleAuthenticator(string clientId, string scope, string redirectUrl, IGoogleAuthenticationDelegate authenticatorDelegate)
+        public GoogleAuthenticator(string clientId, string scope, string redirectUrl, IGoogleAuthenticationDelegate authenticatonDelegate)
         {
-            _authenticatorDelegate = authenticatorDelegate;
+            _authenticatonDelegate = authenticatonDelegate;
 
             _auth = new OAuth2Authenticator(clientId, string.Empty, scope,
                                             new Uri(AuthorizeUrl),
@@ -44,12 +44,12 @@ namespace Xamarin_GoogleAuth.Authentication
                 AccessToken = e.Account.Properties["access_token"]
             };
 
-            _authenticatorDelegate.OnAuthenticationCompleted(token);
+            _authenticatonDelegate.OnAuthenticationCompleted(token);
         }
 
         private void OnAuthenticationFailed(object sender, AuthenticatorErrorEventArgs e)
         {
-            _authenticatorDelegate.OnAuthenticationFailed(e.Message, e.Exception);
+            _authenticatonDelegate.OnAuthenticationFailed(e.Message, e.Exception);
         }
     }
 }
