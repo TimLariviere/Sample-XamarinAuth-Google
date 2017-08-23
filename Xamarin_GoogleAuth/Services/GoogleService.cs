@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace Xamarin_GoogleAuth
+namespace Xamarin_GoogleAuth.Services
 {
     public class GoogleService
     {

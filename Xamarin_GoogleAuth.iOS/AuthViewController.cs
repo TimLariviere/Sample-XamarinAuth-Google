@@ -1,12 +1,13 @@
 ﻿using System;
 using UIKit;
-using Xamarin.Auth;
+using Xamarin_GoogleAuth.Authentication;
+using Xamarin_GoogleAuth.Services;
 
 namespace Xamarin_GoogleAuth.iOS
 {
-    public partial class AuthViewController : UIViewController
+    public partial class AuthViewController : UIViewController, IGoogleAuthenticationDelegate
     {
-        public static WebAuthenticator Auth = null;
+        public static GoogleAuthenticator Auth;
 
         public AuthViewController (IntPtr handle) : base (handle)
         {
@@ -15,47 +16,39 @@ namespace Xamarin_GoogleAuth.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            
-            SetupGoogle();
+
+            Auth = new GoogleAuthenticator(Configuration.ClientId, Configuration.Scope, Configuration.RedirectUrl, this);
 
             GoogleLoginButton.TouchUpInside += OnGoogleLoginButtonClicked;
         }
 
         private void OnGoogleLoginButtonClicked(object sender, EventArgs e)
         {
-            var viewController = Auth.GetUI();
+            var authenticator = Auth.GetAuthenticator();
+            var viewController = authenticator.GetUI();
             PresentViewController(viewController, true, null);
         }
 
-        private void SetupGoogle()
+        public async void OnAuthenticationCompleted(GoogleOAuthToken token)
         {
-            Auth = new OAuth2Authenticator(Configurations.ClientId, string.Empty,
-                                           Configurations.Scope,
-                                           new Uri(Configurations.AuthorizeUrl),
-                                           new Uri(Configurations.RedirectUrl),
-                                           new Uri(Configurations.AccessTokenUrl),
-                                           null, true);
-
-            Auth.Completed += OnGoogleAuthCompleted;
-            Auth.Error += OnGoogleAuthError;
-        }
-
-        private async void OnGoogleAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
-        {
+            // SFSafariViewController doesn't dismiss itself
             DismissViewController(true, null);
 
             var googleService = new GoogleService();
-            var email = await googleService.GetEmailAsync(e.Account.Properties["token_type"], e.Account.Properties["access_token"]);
+            var email = await googleService.GetEmailAsync(token.TokenType, token.AccessToken);
 
             GoogleLoginButton.SetTitle($"Connected with {email}", UIControlState.Normal);
         }
 
-        private void OnGoogleAuthError(object sender, AuthenticatorErrorEventArgs e)
+        public void OnAuthenticationFailed(string message, Exception exception)
         {
+            // SFSafariViewController doesn't dismiss itself
+            DismissViewController(true, null);
+
             var alertController = new UIAlertController
             {
-                Title = e.Message,
-                Message = e.Exception.ToString()
+                Title = message,
+                Message = exception?.ToString()
             };
             PresentViewController(alertController, true, null);
         }

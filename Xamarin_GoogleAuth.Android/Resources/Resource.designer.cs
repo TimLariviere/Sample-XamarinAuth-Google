@@ -26,15 +26,11 @@ namespace Xamarin_GoogleAuth.Droid
 		
 		public static void UpdateIdValues()
 		{
-			global::PCLCrypto.Resource.String.ApplicationName = global::Xamarin_GoogleAuth.Droid.Resource.String.ApplicationName;
-			global::PCLCrypto.Resource.String.Hello = global::Xamarin_GoogleAuth.Droid.Resource.String.Hello;
 			global::Xamarin.Auth.Resource.Animation.slide_in_right = global::Xamarin_GoogleAuth.Droid.Resource.Animation.slide_in_right;
 			global::Xamarin.Auth.Resource.Animation.slide_out_left = global::Xamarin_GoogleAuth.Droid.Resource.Animation.slide_out_left;
 			global::Xamarin.Auth.Resource.Drawable.ic_arrow_back = global::Xamarin_GoogleAuth.Droid.Resource.Drawable.ic_arrow_back;
 			global::Xamarin.Auth.Resource.Id.webview = global::Xamarin_GoogleAuth.Droid.Resource.Id.webview;
 			global::Xamarin.Auth.Resource.Layout.activity_webview = global::Xamarin_GoogleAuth.Droid.Resource.Layout.activity_webview;
-			global::Xamarin.Auth.Resource.String.ApplicationName = global::Xamarin_GoogleAuth.Droid.Resource.String.ApplicationName;
-			global::Xamarin.Auth.Resource.String.Hello = global::Xamarin_GoogleAuth.Droid.Resource.String.Hello;
 			global::Xamarin.Auth.Resource.String.title_activity_webview = global::Xamarin_GoogleAuth.Droid.Resource.String.title_activity_webview;
 		}
 		
@@ -130,14 +126,8 @@ namespace Xamarin_GoogleAuth.Droid
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050002
-			public const int ApplicationName = 2131034114;
-			
 			// aapt resource value: 0x7f050001
-			public const int Hello = 2131034113;
-			
-			// aapt resource value: 0x7f050003
-			public const int googleLogin = 2131034115;
+			public const int googleLogin = 2131034113;
 			
 			// aapt resource value: 0x7f050000
 			public const int title_activity_webview = 2131034112;

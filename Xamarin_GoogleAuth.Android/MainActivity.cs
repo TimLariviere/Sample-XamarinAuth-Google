@@ -2,59 +2,54 @@
 using Android.OS;
 using Android.Widget;
 using System;
-using Xamarin.Auth;
+using Xamarin_GoogleAuth.Authentication;
+using Xamarin_GoogleAuth.Services;
 
 namespace Xamarin_GoogleAuth.Droid
 {
-    [Activity (Label = "Xamarin_GoogleAuth", MainLauncher = true, Icon = "@drawable/icon")]
-	public class MainActivity : Activity
+    [Activity(Label = "Xamarin_GoogleAuth", MainLauncher = true, Icon = "@drawable/icon")]
+    public class MainActivity : Activity, IGoogleAuthenticationDelegate
     {
-        public static OAuth2Authenticator Auth;
+        // Need to be static because we need to access it in GoogleAuthInterceptor for continuation
+        public static GoogleAuthenticator Auth;
 
-        protected override void OnCreate (Bundle bundle)
-		{
-			base.OnCreate (bundle);
-            
-			SetContentView (Resource.Layout.Main);
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
 
-            SetupGoogle();
+            SetContentView(Resource.Layout.Main);
+
+            Auth = new GoogleAuthenticator(Configuration.ClientId, Configuration.Scope, Configuration.RedirectUrl, this);
 
             var googleLoginButton = FindViewById<Button>(Resource.Id.googleLoginButton);
-            googleLoginButton.Click += delegate
-            {
-                var intent = Auth.GetUI(this);
-                StartActivity(intent);
-            };
-		}
-
-        private void SetupGoogle()
-        {
-            Auth = new OAuth2Authenticator(Configurations.ClientId, string.Empty, 
-                                           Configurations.Scope, 
-                                           new Uri(Configurations.AuthorizeUrl), 
-                                           new Uri(Configurations.RedirectUrl), 
-                                           new Uri(Configurations.AccessTokenUrl), 
-                                           null, true);
-
-            Auth.Completed += OnGoogleAuthCompleted;
-            Auth.Error += OnGoogleAuthError;
+            googleLoginButton.Click += OnGoogleLoginButtonClicked;
         }
 
-        private async void OnGoogleAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
+        private void OnGoogleLoginButtonClicked(object sender, EventArgs e)
         {
-            var googleService = new GoogleService();
-            var email = await googleService.GetEmailAsync(e.Account.Properties["token_type"], e.Account.Properties["access_token"]);
+            // Display the activity handling the authentication
+            var authenticator = Auth.GetAuthenticator();
+            var intent = authenticator.GetUI(this);
+            StartActivity(intent);
+        }
 
+        public async void OnAuthenticationCompleted(GoogleOAuthToken token)
+        {
+            // Retrieve the user's email address
+            var googleService = new GoogleService();
+            var email = await googleService.GetEmailAsync(token.TokenType, token.AccessToken);
+
+            // Display it on the UI
             var googleButton = FindViewById<Button>(Resource.Id.googleLoginButton);
             googleButton.Text = $"Connected with {email}";
         }
 
-        private void OnGoogleAuthError(object sender, AuthenticatorErrorEventArgs e)
+        public void OnAuthenticationFailed(string message, Exception exception)
         {
-            var alertBuilder = new AlertDialog.Builder(this);
-            alertBuilder.SetTitle(e.Message);
-            alertBuilder.SetMessage(e.Exception.ToString());
-            alertBuilder.Create().Show();
+            new AlertDialog.Builder(this)
+                           .SetTitle(message)
+                           .SetMessage(exception?.ToString())
+                           .Show();
         }
     }
 }

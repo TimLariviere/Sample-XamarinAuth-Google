@@ -148,6 +148,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
     <Compile Include="AuthViewController.cs" />
     <Compile Include="AuthViewController.designer.cs">
       <DependentUpon>AuthViewController.cs</DependentUpon>

@@ -1,4 +1,4 @@
-﻿namespace Xamarin_GoogleAuth
+﻿namespace Xamarin_GoogleAuth.Services
 {
     public class GoogleEmail
     {

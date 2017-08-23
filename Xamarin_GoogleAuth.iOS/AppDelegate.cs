@@ -59,7 +59,7 @@ namespace Xamarin_GoogleAuth.iOS
             // Convert iOS NSUrl to C#/netxf/BCL System.Uri - common API
             var uri_netfx = new Uri(url.AbsoluteString);
             
-            AuthViewController.Auth.OnPageLoading(uri_netfx);
+            AuthViewController.Auth?.OnPageLoading(uri_netfx);
 
             return true;
         }
