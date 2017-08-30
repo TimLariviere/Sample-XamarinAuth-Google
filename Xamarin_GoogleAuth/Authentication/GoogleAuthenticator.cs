@@ -38,13 +38,19 @@ namespace Xamarin_GoogleAuth.Authentication
 
         private void OnAuthenticationCompleted(object sender, AuthenticatorCompletedEventArgs e)
         {
-            var token = new GoogleOAuthToken
+            if (e.IsAuthenticated)
             {
-                TokenType = e.Account.Properties["token_type"],
-                AccessToken = e.Account.Properties["access_token"]
-            };
-
-            _authenticationDelegate.OnAuthenticationCompleted(token);
+                var token = new GoogleOAuthToken
+                {
+                    TokenType = e.Account.Properties["token_type"],
+                    AccessToken = e.Account.Properties["access_token"]
+                };
+                _authenticationDelegate.OnAuthenticationCompleted(token);
+            }
+            else
+            {
+                _authenticationDelegate.OnAuthenticationCanceled();
+            }
         }
 
         private void OnAuthenticationFailed(object sender, AuthenticatorErrorEventArgs e)

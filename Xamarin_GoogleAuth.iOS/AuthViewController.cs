@@ -40,6 +40,19 @@ namespace Xamarin_GoogleAuth.iOS
             GoogleLoginButton.SetTitle($"Connected with {email}", UIControlState.Normal);
         }
 
+        public void OnAuthenticationCanceled()
+        {
+            // SFSafariViewController doesn't dismiss itself
+            DismissViewController(true, null);
+
+            var alertController = new UIAlertController
+            {
+                Title = "Authentication canceled",
+                Message = "You didn't completed the authentication process"
+            };
+            PresentViewController(alertController, true, null);
+        }
+
         public void OnAuthenticationFailed(string message, Exception exception)
         {
             // SFSafariViewController doesn't dismiss itself

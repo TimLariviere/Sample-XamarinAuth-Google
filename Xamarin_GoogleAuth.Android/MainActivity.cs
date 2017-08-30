@@ -44,6 +44,14 @@ namespace Xamarin_GoogleAuth.Droid
             googleButton.Text = $"Connected with {email}";
         }
 
+        public void OnAuthenticationCanceled()
+        {
+            new AlertDialog.Builder(this)
+                           .SetTitle("Authentication canceled")
+                           .SetMessage("You didn't completed the authentication process")
+                           .Show();
+        }
+
         public void OnAuthenticationFailed(string message, Exception exception)
         {
             new AlertDialog.Builder(this)
